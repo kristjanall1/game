@@ -1,0 +1,134 @@
+
+/**
+ * Tegemist on mälumänguga. Mängu eesmärgiks on leida paarid võimalikult kiiresti.
+ * Kristjan All 
+ * 19.05.2012
+ */
+ 
+ 
+import java.awt.*;
+import java.util.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.*;
+import static java.util.Collections.*;
+ 
+public class Mälumäng extends JFrame implements ActionListener { //ootab kasutaja sekkumist
+    private JButton lahku, uus; //muutujate deklareerimine
+    private JButton[] kast = new JButton[16];
+    private ArrayList<Integer> mäng = new ArrayList<Integer>();
+    private int loendaja = 0;
+    private int[] kastID = new int[2];
+    private int[] kastNumber = new int[2];
+ 
+    public Mälumäng() {
+        init();
+        panel();
+        setArrayListText();
+        setTitle("Mälumäng");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(500, 500);
+        setVisible(true);
+    }
+ 
+    public void init() { //mälumäng alamprogramm
+        for (int i = 0; i < kast.length; i++) {
+            kast[i] = new JButton();
+            kast[i].setBackground(Color.blue);
+            UIManager.put("Button.foreground", Color.white);
+            kast[i].setFont(new Font("Serif", Font.BOLD, 40));
+            kast[i].addActionListener(this);
+        }
+        lahku = new JButton("Lahku");
+        lahku.setBackground(Color.blue);
+        UIManager.put("Button.foreground", Color.white);
+        lahku.addActionListener(this);
+        uus = new JButton("Uus mäng");
+        uus.addActionListener(this);
+        uus.setBackground(Color.blue);
+        UIManager.put("Button.foreground", Color.white);
+    }
+ 
+    public void panel() { //mälumäng alamprogramm //loob paneelid ja nende nupud
+        Panel ruudustik = new Panel();
+        ruudustik.setLayout(new GridLayout(4, 4));
+        for (int i = 0; i < kast.length; i++) {
+            ruudustik.add(kast[i]);
+        }
+ 
+        Panel nupud = new Panel();
+        nupud.add(uus);
+        nupud.add(lahku);
+        nupud.setLayout(new GridLayout(1, 0));
+ 
+        add(ruudustik, BorderLayout.CENTER);
+        add(nupud, BorderLayout.NORTH);
+ 
+    }
+ 
+    public void setArrayListText() { // mälumäng alamprogramm
+        for (int i = 0; i < 2; i++) {
+            for (int ii = 1; ii < (kast.length / 2) + 1; ii++) {
+                mäng.add(ii);
+            }
+        }
+        shuffle(mäng); // seagab reastuse
+        int newLine = 0;
+        for (int a = 0; a < mäng.size(); a++) {
+            newLine++;
+            System.out.print(" " + mäng.get(a));
+            if (newLine == 4) {
+                System.out.println();
+                newLine = 0;
+            }
+        }
+    }
+ 
+    public boolean sameValues() {// kontrollib valikute väärtusi
+        if (kastNumber[0] == kastNumber[1]) {
+            return true;
+        }
+        return false;
+    }
+ 
+    @Override
+    public void actionPerformed(ActionEvent e) { //kontrollib kasutaja sekkumist
+        if (lahku == e.getSource()) { //vajutati nupule lahku
+            System.exit(0); //lõpetab mängu
+        }
+        if (uus == e.getSource()) { //vajutati nupule uus mäng
+            //see funktsioon ei ole töökorras
+        }
+        for (int i = 0; i < kast.length; i++) { //toob numbri nähtavale
+            if (kast[i] == e.getSource()) {
+                kast[i].setText("" + mäng.get(i));
+                kast[i].setEnabled(false);
+                loendaja++;
+                if (loendaja == 3) { //kui valiti kolmas kast
+                    if (sameValues()) { // kui valikud kalppisid
+                        kast[kastID[0]].setEnabled(false);
+                        kast[kastID[1]].setEnabled(false);
+                    } else { // peidab valikud
+                        kast[kastID[0]].setEnabled(true);
+                        kast[kastID[0]].setText("");
+                        kast[kastID[1]].setEnabled(true);
+                        kast[kastID[1]].setText("");
+                    }
+                    loendaja = 1;
+                }
+                if (loendaja == 1) { //toob esimese kasti nähtavale
+                    kastID[0] = i;
+                    kastNumber[0] = mäng.get(i);
+                }
+                if (loendaja == 2) { //toob teise kasti nähtavale
+                    kastID[1] = i;
+                    kastNumber[1] = mäng.get(i);
+                }
+            }
+        }
+    }
+ 
+    public static void main(String[] args) { //peaprogramm
+        new Mälumäng();
+    }
+}
