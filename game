@@ -1,8 +1,8 @@
-
 /**
  * Tegemist on mälumänguga. Mängu eesmärgiks on leida paarid võimalikult kiiresti.
  * Kristjan All 
  * 19.05.2012
+ * Muudetud: 25.05.2012
  */
  
  
@@ -14,69 +14,68 @@ import javax.swing.*;
 import static java.util.Collections.*;
  
 public class Mälumäng extends JFrame implements ActionListener { //ootab kasutaja sekkumist
-    private JButton lahku, uus; //muutujate deklareerimine
-    private JButton[] kast = new JButton[16];
-    private ArrayList<Integer> mäng = new ArrayList<Integer>();
-    private int loendaja = 0;
+    private JButton lahku, uus; //lahku ja uus mäng nupu  deklareerimine
+    private JButton[] kast = new JButton[16]; //mängu muppude deklareerimine
+    private ArrayList<Integer> mäng = new ArrayList<Integer>();//reastuse mäng deklareerimine
+    private int loendaja = 0;// loendaja deklareerimine
     private int[] kastID = new int[2];
     private int[] kastNumber = new int[2];
  
-    public Mälumäng() {
-        init();
-        panel();
-        setArrayListText();
-        setTitle("Mälumäng");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(500, 500);
-        setVisible(true);
+    public Mälumäng() {// peaprogramm
+        init();//kutsub esile alamprogrammi init
+        panel();//kutsub esile alamprogrammi panel
+        setArrayListText();//kutsub esile alamprogrammi setArrayListText
+        setTitle("Mälumäng");//seab mängu nimeks "Mälumäng"
+        setDefaultCloseOperation(EXIT_ON_CLOSE);//paneb mängu kinni kui aken sulgetakse
+        setSize(500, 500);//määrab akna suuruse pikslites
+        setVisible(true);//teeb akna nähtavaks
     }
  
-    public void init() { //mälumäng alamprogramm
+    public void init() { //mälumäng alamprogramm, mis loob nupud
         for (int i = 0; i < kast.length; i++) {
-            kast[i] = new JButton();
-            kast[i].setBackground(Color.blue);
-            UIManager.put("Button.foreground", Color.white);
-            kast[i].setFont(new Font("Serif", Font.BOLD, 40));
-            kast[i].addActionListener(this);
+            kast[i] = new JButton();// Loob nupud kast[]
+            kast[i].setBackground(Color.blue);//seab taustavärviks sinise
+            UIManager.put("Button.foreground", Color.white);// seab teksti värviks valge
+            kast[i].setFont(new Font("Serif", Font.BOLD, 40));//seab teksti fondi ja suuruse
+            kast[i].addActionListener(this);// teeb nupu vajutatavaks
         }
-        lahku = new JButton("Lahku");
-        lahku.setBackground(Color.blue);
-        UIManager.put("Button.foreground", Color.white);
-        lahku.addActionListener(this);
-        uus = new JButton("Uus mäng");
-        uus.addActionListener(this);
-        uus.setBackground(Color.blue);
-        UIManager.put("Button.foreground", Color.white);
+        lahku = new JButton("Lahku");// loob nupu lahku
+        lahku.setBackground(Color.blue);// seab taustavärvi siniseks
+        UIManager.put("Button.foreground", Color.white);//seab teksti valgeks
+        lahku.addActionListener(this);//teeb nupuvajutatavaks
+        uus = new JButton("Uus mäng");//loob nupu uus
+        uus.addActionListener(this);//teeb nupu vajutatavaks
+        uus.setBackground(Color.blue);//seab taustavärvi siniseks
     }
  
-    public void panel() { //mälumäng alamprogramm //loob paneelid ja nende nupud
-        Panel ruudustik = new Panel();
-        ruudustik.setLayout(new GridLayout(4, 4));
+    public void panel() { //mälumäng alamprogramm //loob paneelid ja seab nupud
+        Panel ruudustik = new Panel();// loob paneeli ruudustik
+        ruudustik.setLayout(new GridLayout(4, 4));// seab paneel ruudustiku dimensioonideks 4*4
         for (int i = 0; i < kast.length; i++) {
-            ruudustik.add(kast[i]);
+            ruudustik.add(kast[i]); //lisab ruudustikule nupud
         }
  
-        Panel nupud = new Panel();
-        nupud.add(uus);
-        nupud.add(lahku);
-        nupud.setLayout(new GridLayout(1, 0));
+        Panel nupud = new Panel();// loob paneeli nupud
+        nupud.add(uus);//lisab paneeli nupu uus
+        nupud.add(lahku);//lisab paneeli nupu lahku
+        nupud.setLayout(new GridLayout(1, 0));//seab paneeli dimensioonideks 1*0
  
-        add(ruudustik, BorderLayout.CENTER);
-        add(nupud, BorderLayout.NORTH);
+        add(ruudustik, BorderLayout.CENTER);//kirjeldab et paneel ruudustik peab asuma keskel
+        add(nupud, BorderLayout.NORTH);//kirjeldab et paneel nupud peavad asuma üleval
  
     }
  
     public void setArrayListText() { // mälumäng alamprogramm
         for (int i = 0; i < 2; i++) {
             for (int ii = 1; ii < (kast.length / 2) + 1; ii++) {
-                mäng.add(ii);
+                mäng.add(ii);//seab kastidele numbrid
             }
         }
         shuffle(mäng); // seagab reastuse
         int newLine = 0;
         for (int a = 0; a < mäng.size(); a++) {
             newLine++;
-            System.out.print(" " + mäng.get(a));
+            System.out.print(" " + mäng.get(a));//peidab kastide numbrid
             if (newLine == 4) {
                 System.out.println();
                 newLine = 0;
@@ -96,8 +95,16 @@ public class Mälumäng extends JFrame implements ActionListener { //ootab kasut
         if (lahku == e.getSource()) { //vajutati nupule lahku
             System.exit(0); //lõpetab mängu
         }
-        if (uus == e.getSource()) { //vajutati nupule uus mäng
-            //see funktsioon ei ole töökorras
+        if (uus == e.getSource()) { //vajutati nupule uus mäng seab kõik algasendisse
+            for (int i = 0; i < kast.length; i++){
+            kast[i].setEnabled(true);
+            kast[i].setText("");
+            }
+            loendaja = 0;
+            kastID = new int[2];
+            kastNumber = new int[2];
+            mäng = new ArrayList<Integer>();
+            setArrayListText();
         }
         for (int i = 0; i < kast.length; i++) { //toob numbri nähtavale
             if (kast[i] == e.getSource()) {
@@ -128,7 +135,7 @@ public class Mälumäng extends JFrame implements ActionListener { //ootab kasut
         }
     }
  
-    public static void main(String[] args) { //peaprogramm
-        new Mälumäng();
+    public static void main(String[] args) { 
+        new Mälumäng();//kutsub esile mälumängu
     }
 }
